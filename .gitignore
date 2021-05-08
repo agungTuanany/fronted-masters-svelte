@@ -1,2 +1,9 @@
+# Dependencies Directory
+node_modules/
+*/public/build/
+
+.DS_Store
+
+# Miscellaneous
 ~*
 *~
