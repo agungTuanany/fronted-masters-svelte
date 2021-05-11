@@ -23,19 +23,21 @@
 
         const lookup = new Map();
 
+        // create a new map in variable 'lookup'
         data.forEach((c) => {
             lookup.set(c.id, c);
         });
 
         const subset = new Set();
         data.forEach((celeb) => {
-            if (celeb.review >= 50) {
+            if (celeb.reviews >= 50) {
                 subset.add(celeb);
                 celeb.similar.forEach((id) => {
                     subset.add(lookup.get(id));
                 });
             }
         });
+
         return {
             celebs: Array.from(subset),
             lookup,
@@ -50,7 +52,7 @@
 <main>
     {#if state === "welcome"}
         <Welcome on:select={start} />
-    {:else}
+    {:else if state === "playing"}
         <Game {selection} />
     {/if}
 </main>
@@ -61,5 +63,9 @@
         padding: 1em;
         max-width: 800px;
         margin: 0 auto;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 </style>
