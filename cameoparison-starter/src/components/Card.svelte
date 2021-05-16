@@ -79,7 +79,7 @@
         font-weight: 700;
     }
 
-    .price:large {
+    .price.large {
         font-size: 6em;
     }
 
