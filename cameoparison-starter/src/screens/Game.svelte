@@ -1,5 +1,7 @@
 <script>
     import { createEventDispatcher } from "svelte";
+    import { fly } from "svelte/transition";
+    import * as eases from "svelte/easing";
 
     import Card from "../components/Card.svelte";
     import { sleep, pick_random, load_image } from "../utils.js";
@@ -21,6 +23,7 @@
     const results = Array(selection.length);
     let last_result;
     let done = false;
+    let ready = true;
 
     $: score = results.filter((x) => x === "right").length;
 
@@ -62,9 +65,15 @@
             <p>{pick_message(score / results.length)}</p>
             <button on:click={() => dispatch("restart")}>Back to main screen</button>
         </div>
-    {:else}
+    {:else if ready}
         {#await promises[i] then [a, b]}
-            <div class="game">
+            <div
+                class="game"
+                in:fly={{ duration: 200, y: 20 }}
+                out:fly={{ duration: 200, y: -20 }}
+                on:outrostart={() => (ready = false)}
+                on:outroend={() => (ready = true)}
+            >
                 <div class="card-container">
                     <Card
                         celeb={a}
