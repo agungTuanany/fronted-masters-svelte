@@ -1,6 +1,6 @@
 <script>
     import { createEventDispatcher } from "svelte";
-    import { fly } from "svelte/transition";
+    import { fly, crossfade } from "svelte/transition";
     import * as eases from "svelte/easing";
 
     import Card from "../components/Card.svelte";
@@ -9,6 +9,11 @@
     export let selection;
 
     const dispatch = createEventDispatcher();
+
+    const [send, receive] = crossfade({
+        easing: eases.cubicOut,
+        duration: 300,
+    });
 
     const load_details = async (celeb) => {
         const res = await fetch(`https://cameo-explorer.netlify.app/celebs/${celeb.id}.json`);
@@ -42,6 +47,8 @@
 
         results[i] = last_result;
         last_result = null;
+
+        await sleep(500);
 
         if (i < selection.length - 1) {
             i += 1;
@@ -103,14 +110,20 @@
 </div>
 
 {#if last_result}
-    <img class="giant-result" alt="{last_result} answer" src="/icons/{last_result}.svg" />
+    <img
+        in:fly={{ duration: 200, x: 100 }}
+        out:send={{ key: i }}
+        class="giant-result"
+        alt="{last_result} answer"
+        src="/icons/{last_result}.svg"
+    />
 {/if}
 
 <div class="results" style="grid-template-columns: repeat({results.length}, 1fr)">
-    {#each results as result}
+    {#each results as result, i}
         <span class="result">
             {#if result}
-                <img alt="{result} answer" src="/icons/{result}.svg" />
+                <img in:receive={{ key: i }} alt="{result} answer" src="/icons/{result}.svg" />
             {/if}
         </span>
     {/each}
