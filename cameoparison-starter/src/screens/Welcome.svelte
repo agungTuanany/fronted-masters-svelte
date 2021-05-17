@@ -44,6 +44,7 @@
 </div>
 
 <style>
+    /* {{{ */
     h1 {
         color: #ff3e00;
         text-transform: uppercase;
@@ -88,4 +89,5 @@
             width: auto;
         }
     }
+    /* }}} */
 </style>
